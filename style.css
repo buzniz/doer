@@ -82,16 +82,18 @@ body {
   line-height: 1.05;
   letter-spacing: -0.01em;
   margin-bottom: 2.5rem;
-  -webkit-text-stroke: 1.5px #000000;
+  -webkit-text-stroke: 3px #000000;
   paint-order: stroke fill;
   text-shadow:
-    -1px -1px 0 #000, 1px -1px 0 #000,
-    -1px 1px 0 #000, 1px 1px 0 #000;
+    -2px -2px 0 #000, 2px -2px 0 #000,
+    -2px 2px 0 #000, 2px 2px 0 #000,
+    -2px 0 0 #000, 2px 0 0 #000,
+    0 -2px 0 #000, 0 2px 0 #000;
 }
 
 .accent {
   color: var(--accent);
-  -webkit-text-stroke: 1.5px #000000;
+  -webkit-text-stroke: 3px #000000;
   paint-order: stroke fill;
 }
 
@@ -101,7 +103,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: var(--bg-card);
+  background: #333F56;
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 1rem 1.25rem;
