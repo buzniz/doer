@@ -1,0 +1,240 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg: #3B4A63;
+  --bg-card: #465577;
+  --text: #F3F5F8;
+  --text-dim: #B0BACB;
+  --accent: #FFC94A;
+  --accent-soft: #E6C173;
+  --border: #5A6A87;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- topbar ---------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem clamp(1.5rem, 5vw, 4rem);
+}
+
+.wordmark {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 0.02em;
+}
+
+.nav-link {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.nav-link:hover,
+.nav-link:focus-visible {
+  color: var(--text);
+}
+
+/* ---------- hero ---------- */
+
+.hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem clamp(1.5rem, 5vw, 4rem) 4rem;
+  max-width: 900px;
+}
+
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+  margin-bottom: 1.25rem;
+}
+
+.headline {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  margin-bottom: 2.5rem;
+  -webkit-text-stroke: 1.5px #000000;
+  paint-order: stroke fill;
+  text-shadow:
+    -1px -1px 0 #000, 1px -1px 0 #000,
+    -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.accent {
+  color: var(--accent);
+  -webkit-text-stroke: 1.5px #000000;
+  paint-order: stroke fill;
+}
+
+/* ---------- prompt / search ---------- */
+
+.prompt-shell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  max-width: 640px;
+  transition: border-color 0.15s ease;
+}
+
+.prompt-shell:focus-within {
+  border-color: var(--accent);
+}
+
+.prompt-glyph {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--accent);
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.prompt-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  min-width: 0;
+}
+
+.prompt-input::placeholder {
+  color: var(--text-dim);
+}
+
+.cursor {
+  width: 2px;
+  height: 1.1rem;
+  background: var(--text-dim);
+  animation: blink 1.1s step-end infinite;
+  flex-shrink: 0;
+}
+
+.prompt-input:focus ~ .cursor {
+  display: none;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+.prompt-go {
+  background: var(--accent);
+  color: #0B0D0F;
+  border: none;
+  border-radius: 6px;
+  padding: 0.55rem 1.1rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+  flex-shrink: 0;
+}
+
+.prompt-go:hover,
+.prompt-go:focus-visible {
+  opacity: 0.85;
+}
+
+/* ---------- services ---------- */
+
+.services {
+  margin-top: 2.5rem;
+}
+
+.services-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-bottom: 0.9rem;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--text);
+  background: #2A3548;
+  border: 1px solid #24304A;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.tag:hover,
+.tag:focus-visible {
+  background: #34405A;
+  border-color: var(--accent-soft);
+  color: var(--accent-soft);
+}
+
+/* ---------- footer ---------- */
+
+.footer {
+  padding: 1.5rem clamp(1.5rem, 5vw, 4rem);
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  border-top: 1px solid var(--border);
+}
+
+/* ---------- reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* ---------- mobile ---------- */
+
+@media (max-width: 480px) {
+  .prompt-shell {
+    flex-wrap: wrap;
+  }
+  .prompt-go {
+    width: 100%;
+    order: 3;
+  }
+}
