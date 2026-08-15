@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOER — Browse category</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <a href="index.html" class="wordmark" style="text-decoration:none;color:inherit;">DOER</a>
+    <nav class="topnav">
+      <a href="index.html" class="nav-link">Back to search</a>
+    </nav>
+  </header>
+
+  <main class="hero">
+    <p class="eyebrow">// category</p>
+    <h1 class="headline" id="categoryTitle">Loading<span class="accent">...</span></h1>
+
+    <!-- ============================================================
+         EDIT ME: this is where real provider listings will go once
+         you have them. For now it just shows a placeholder message.
+
+         When you're ready to add real listings, this is the spot —
+         either hardcode simple cards here per category, or extend
+         script.js with a LISTINGS object (same pattern as SERVICES).
+         ============================================================ -->
+    <div id="listingsArea">
+      <p style="color: var(--text-dim); font-family: 'JetBrains Mono', monospace; font-size: 0.95rem;">
+        No listings yet for this category. Check back soon.
+      </p>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <p>DOER — get things done.</p>
+  </footer>
+
+<script src="script.js"></script>
+<script>
+  // Reads either ?type=<category-key> or ?q=<free text search>
+  // and shows a friendly title. Relies on SERVICES from script.js.
+  (function () {
+    const params = new URLSearchParams(window.location.search);
+    const type = params.get("type");
+    const q = params.get("q");
+    const titleEl = document.getElementById("categoryTitle");
+
+    if (type && SERVICES[type]) {
+      titleEl.innerHTML = `${SERVICES[type]}<span class="accent">.</span>`;
+    } else if (q) {
+      titleEl.innerHTML = `Results for<br><span class="accent">"${q.replace(/</g, "&lt;")}"</span>`;
+    } else {
+      titleEl.innerHTML = `Browse<span class="accent">.</span>`;
+    }
+  })();
+</script>
+</body>
+</html>
