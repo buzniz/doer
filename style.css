@@ -94,11 +94,12 @@ body {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: #14171C;
+  border: 1px solid #000000;
   border-radius: 10px;
   padding: 1rem 1.25rem;
   max-width: 640px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
   transition: border-color 0.15s ease;
 }
 
@@ -187,16 +188,18 @@ body {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.85rem;
   color: var(--text);
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: #14171C;
+  border: 1px solid #000000;
   border-radius: 999px;
   padding: 0.5rem 1rem;
   cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
 }
 
 .tag:hover,
 .tag:focus-visible {
+  background: #1C2027;
   border-color: var(--accent-soft);
   color: var(--accent-soft);
 }
@@ -207,7 +210,7 @@ body {
   padding: 1.5rem clamp(1.5rem, 5vw, 4rem);
   color: var(--text-dim);
   font-size: 0.8rem;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid #000000;
 }
 
 /* ---------- reduced motion ---------- */
