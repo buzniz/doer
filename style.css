@@ -1,13 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  --bg: #0B0D0F;
-  --bg-card: #1C1F23;
-  --text: #F2F0EA;
-  --text-dim: #6B7078;
+  --bg: #3B4A63;
+  --bg-card: #465577;
+  --text: #F3F5F8;
+  --text-dim: #B0BACB;
   --accent: #FFC94A;
   --accent-soft: #E6C173;
-  --border: #2A2E33;
+  --border: #5A6A87;
 }
 
 * {
