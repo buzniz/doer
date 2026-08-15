@@ -1,4 +1,4 @@
-// DOER — homepage script
+// DOER - homepage script
 // v1: directory only. Categories below, no provider listings yet.
 //
 // ============================================================
@@ -33,7 +33,7 @@ const searchGo = document.getElementById("searchGo");
 const tagRow = document.getElementById("tagRow");
 
 // Build the tag buttons from SERVICES above. index.html no longer
-// hardcodes any tags — this is the single source of truth.
+// hardcodes any tags - this is the single source of truth.
 function renderTags() {
   tagRow.innerHTML = "";
   for (const [key, label] of Object.entries(SERVICES)) {
