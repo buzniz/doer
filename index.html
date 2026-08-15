@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOER — Get it done.</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="wordmark">DOER</div>
+    <nav class="topnav">
+      <a href="#" class="nav-link">For businesses</a>
+    </nav>
+  </header>
+
+  <main class="hero">
+    <p class="eyebrow">local jobs, done right</p>
+    <h1 class="headline">Whatever it is,<br>someone can <span class="accent">do it.</span></h1>
+
+    <div class="prompt-shell">
+      <span class="prompt-glyph">&gt;</span>
+      <input
+        id="searchInput"
+        class="prompt-input"
+        type="text"
+        placeholder="what do you need done?"
+        autocomplete="off"
+        spellcheck="false"
+      >
+      <span class="cursor" aria-hidden="true"></span>
+      <button class="prompt-go" id="searchGo" aria-label="Search">Go</button>
+    </div>
+
+    <div class="services">
+      <p class="services-label">// popular</p>
+      <div class="tag-row" id="tagRow">
+        <button class="tag" data-service="computer-repair">computer</button>
+        <button class="tag" data-service="plumbing">plumbing</button>
+        <button class="tag" data-service="cleaning">cleaning</button>
+        <button class="tag" data-service="gutters">gutters</button>
+        <button class="tag" data-service="moving">moving</button>
+        <button class="tag" data-service="pressure-washing">pressure wash</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>DOER — get things done.</p>
+  </footer>
+
+<script src="script.js"></script>
+</body>
+</html>
