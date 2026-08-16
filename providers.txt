@@ -1,11 +1,3 @@
-CATEGORIES (reference only, not read by the code):
-moving
-tech-repair
-cleaning
-plumbing
-gutters
-pressure-washing
-
 ---
 category:
 name:
@@ -21,7 +13,7 @@ price: $15/h
 other:
 photo:
 ---
-category: tech-repair
+category: tech repair
 name: Greg
 stars: 5
 price: $50/completion

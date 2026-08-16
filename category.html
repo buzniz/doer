@@ -34,52 +34,20 @@
 
 <script src="script.js"></script>
 <script>
-  // Reads either ?type=<category-key> or ?q=<free text search>
-  // and shows a friendly title. Relies on SERVICES from script.js.
+  // Reads either ?type=<category> or ?q=<free text search>
+  // and shows a friendly title. parseProviders/titleCase come
+  // from script.js - not redefined here.
   const params = new URLSearchParams(window.location.search);
   const type = params.get("type");
   const q = params.get("q");
   const titleEl = document.getElementById("categoryTitle");
 
-  if (type && SERVICES[type]) {
-    titleEl.innerHTML = `${SERVICES[type]}<span class="accent">.</span>`;
+  if (type) {
+    titleEl.innerHTML = `${titleCase(type)}<span class="accent">.</span>`;
   } else if (q) {
     titleEl.innerHTML = `Results for<br><span class="accent">"${q.replace(/</g, "&lt;")}"</span>`;
   } else {
     titleEl.innerHTML = `Browse<span class="accent">.</span>`;
-  }
-
-  // ------------------------------------------------------------
-  // Parse data/providers.txt into a list of provider objects.
-  // Each entry is a block of "key: value" lines separated by a
-  // line containing only "---". Blocks missing category or name
-  // (like the CATEGORIES reference list at the top of the file)
-  // are skipped automatically.
-  // ------------------------------------------------------------
-  function parseProviders(text) {
-    const blocks = text.split(/^---\s*$/m);
-    const providers = [];
-
-    for (const block of blocks) {
-      const lines = block.split("\n");
-      const entry = {};
-
-      for (const line of lines) {
-        const match = line.match(/^\s*(category|name|stars|price|other|photo)\s*:\s*(.*)$/i);
-        if (!match) continue;
-        const key = match[1].toLowerCase();
-        const value = match[2].trim();
-        if (value) entry[key] = value;
-      }
-
-      // Require both category and name; this is what skips the
-      // CATEGORIES reference block and the blank template block.
-      if (entry.category && entry.name) {
-        providers.push(entry);
-      }
-    }
-
-    return providers;
   }
 
   function starsDisplay(starsValue) {
