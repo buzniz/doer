@@ -19,18 +19,11 @@
     <p class="eyebrow">// category</p>
     <h1 class="headline" id="categoryTitle">Loading<span class="accent">...</span></h1>
 
-    <!-- ============================================================
-         EDIT ME: this is where real provider listings will go once
-         you have them. For now it just shows a placeholder message.
-
-         When you're ready to add real listings, this is the spot -
-         either hardcode simple cards here per category, or extend
-         script.js with a LISTINGS object (same pattern as SERVICES).
-         ============================================================ -->
     <div id="listingsArea">
-      <p style="color: var(--text-dim); font-family: 'JetBrains Mono', monospace; font-size: 0.95rem;">
-        No listings yet for this category. Check back soon.
+      <p id="loadingMsg" style="color: var(--text-dim); font-family: 'JetBrains Mono', monospace; font-size: 0.95rem;">
+        Loading listings...
       </p>
+      <div id="cardGrid" class="card-grid"></div>
     </div>
 
   </main>
@@ -43,20 +36,121 @@
 <script>
   // Reads either ?type=<category-key> or ?q=<free text search>
   // and shows a friendly title. Relies on SERVICES from script.js.
-  (function () {
-    const params = new URLSearchParams(window.location.search);
-    const type = params.get("type");
-    const q = params.get("q");
-    const titleEl = document.getElementById("categoryTitle");
+  const params = new URLSearchParams(window.location.search);
+  const type = params.get("type");
+  const q = params.get("q");
+  const titleEl = document.getElementById("categoryTitle");
 
-    if (type && SERVICES[type]) {
-      titleEl.innerHTML = `${SERVICES[type]}<span class="accent">.</span>`;
-    } else if (q) {
-      titleEl.innerHTML = `Results for<br><span class="accent">"${q.replace(/</g, "&lt;")}"</span>`;
-    } else {
-      titleEl.innerHTML = `Browse<span class="accent">.</span>`;
+  if (type && SERVICES[type]) {
+    titleEl.innerHTML = `${SERVICES[type]}<span class="accent">.</span>`;
+  } else if (q) {
+    titleEl.innerHTML = `Results for<br><span class="accent">"${q.replace(/</g, "&lt;")}"</span>`;
+  } else {
+    titleEl.innerHTML = `Browse<span class="accent">.</span>`;
+  }
+
+  // ------------------------------------------------------------
+  // Parse data/providers.txt into a list of provider objects.
+  // Each entry is a block of "key: value" lines separated by a
+  // line containing only "---". Blocks missing category or name
+  // (like the CATEGORIES reference list at the top of the file)
+  // are skipped automatically.
+  // ------------------------------------------------------------
+  function parseProviders(text) {
+    const blocks = text.split(/^---\s*$/m);
+    const providers = [];
+
+    for (const block of blocks) {
+      const lines = block.split("\n");
+      const entry = {};
+
+      for (const line of lines) {
+        const match = line.match(/^\s*(category|name|stars|price|other|photo)\s*:\s*(.*)$/i);
+        if (!match) continue;
+        const key = match[1].toLowerCase();
+        const value = match[2].trim();
+        if (value) entry[key] = value;
+      }
+
+      // Require both category and name; this is what skips the
+      // CATEGORIES reference block and the blank template block.
+      if (entry.category && entry.name) {
+        providers.push(entry);
+      }
     }
-  })();
+
+    return providers;
+  }
+
+  function starsDisplay(starsValue) {
+    const num = parseFloat(starsValue);
+    if (isNaN(num)) return "";
+    const rounded = Math.round(num * 2) / 2; // nearest half star
+    const full = Math.floor(rounded);
+    const half = rounded - full === 0.5;
+    let str = "\u2605".repeat(full);
+    if (half) str += "\u00BD";
+    return `${str} <span style="color: var(--text-dim);">(${num})</span>`;
+  }
+
+  function renderCard(entry) {
+    const card = document.createElement("div");
+    card.className = "provider-card";
+
+    let html = "";
+
+    if (entry.photo) {
+      html += `<img class="provider-photo" src="${entry.photo}" alt="${entry.name}" loading="lazy" onerror="this.style.display='none'">`;
+    }
+
+    html += `<div class="provider-body">`;
+    html += `<p class="provider-name">${entry.name}</p>`;
+
+    if (entry.stars) {
+      html += `<p class="provider-stars">${starsDisplay(entry.stars)}</p>`;
+    }
+
+    if (entry.price) {
+      html += `<p class="provider-price">${entry.price}</p>`;
+    }
+
+    if (entry.other) {
+      html += `<p class="provider-other">${entry.other}</p>`;
+    }
+
+    html += `</div>`;
+    card.innerHTML = html;
+    return card;
+  }
+
+  async function loadListings() {
+    const loadingMsg = document.getElementById("loadingMsg");
+    const grid = document.getElementById("cardGrid");
+
+    try {
+      const res = await fetch("data/providers.txt");
+      if (!res.ok) throw new Error("Could not load providers.txt");
+      const text = await res.text();
+      const allProviders = parseProviders(text);
+
+      const matches = type
+        ? allProviders.filter((p) => p.category.toLowerCase() === type.toLowerCase())
+        : allProviders;
+
+      if (matches.length === 0) {
+        loadingMsg.textContent = "No listings yet for this category. Check back soon.";
+        return;
+      }
+
+      loadingMsg.style.display = "none";
+      matches.forEach((entry) => grid.appendChild(renderCard(entry)));
+    } catch (err) {
+      loadingMsg.textContent = "Couldn't load listings right now.";
+      console.error(err);
+    }
+  }
+
+  loadListings();
 </script>
 </body>
 </html>
