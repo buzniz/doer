@@ -90,6 +90,31 @@ body {
   color: var(--accent);
 }
 
+/* ---------- location filters ---------- */
+
+.location-row {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.location-select {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--text);
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
+}
+
+.location-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* ---------- prompt / search ---------- */
 
 .prompt-shell {
@@ -277,6 +302,13 @@ body {
   font-family: 'Inter', sans-serif;
   font-weight: 600;
   font-size: 1rem;
+  margin-bottom: 0.35rem;
+}
+
+.provider-location {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text-dim);
   margin-bottom: 0.35rem;
 }
 

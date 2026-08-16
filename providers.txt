@@ -1,6 +1,8 @@
 ---
 category:
 name:
+state:
+city:
 stars:
 price:
 other:
@@ -8,6 +10,8 @@ photo:
 ---
 category: moving
 name: Jacob Wick
+state: New York
+city: Utica
 stars:
 price: $15/h
 other:
@@ -15,8 +19,10 @@ photo:
 ---
 category: tech repair
 name: Greg
+state: New York
+city: Utica
 stars: 5
 price: $50/completion
 other: allergic to cats
-photo: https://github.com/buzniz/doer/raw/refs/heads/main/photos/low%20quality%20emoji.jfif
+photo: https://github.com/buzniz/doer/blob/main/photos/low%20quality%20emoji.jfif
 ---

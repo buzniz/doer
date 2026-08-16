@@ -25,7 +25,7 @@ function parseProviders(text) {
     const entry = {};
 
     for (const line of lines) {
-      const match = line.match(/^\s*(category|name|stars|price|other|photo)\s*:\s*(.*)$/i);
+      const match = line.match(/^\s*(category|name|state|city|stars|price|other|photo)\s*:\s*(.*)$/i);
       if (!match) continue;
       const key = match[1].toLowerCase();
       const value = match[2].trim();
@@ -79,9 +79,12 @@ async function fetchProviders() {
 const searchInput = document.getElementById("searchInput");
 const searchGo = document.getElementById("searchGo");
 const tagRow = document.getElementById("tagRow");
+const stateSelect = document.getElementById("stateSelect");
+const citySelect = document.getElementById("citySelect");
 
 if (tagRow) {
   let knownCategories = [];
+  let allProviders = [];
 
   function renderTags(categories) {
     tagRow.innerHTML = "";
@@ -94,8 +97,54 @@ if (tagRow) {
     }
   }
 
+  // Fill the state dropdown with every unique state that appears
+  // in providers.txt, in first-seen order. Entries with no state
+  // set are simply not counted - they just won't be filterable
+  // by location, same as any other optional field.
+  function populateStates(providers) {
+    const seen = new Set();
+    stateSelect.innerHTML = '<option value="">All states</option>';
+    for (const p of providers) {
+      if (!p.state) continue;
+      const key = p.state.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const opt = document.createElement("option");
+      opt.value = p.state;
+      opt.textContent = p.state;
+      stateSelect.appendChild(opt);
+    }
+  }
+
+  // Fill the city dropdown based on whichever state is currently
+  // selected. If no state is selected, city stays disabled -
+  // picking a city without a state doesn't make sense once there
+  // are same-named cities in different states.
+  function populateCities(providers, selectedState) {
+    citySelect.innerHTML = '<option value="">All cities</option>';
+    if (!selectedState) {
+      citySelect.disabled = true;
+      return;
+    }
+    citySelect.disabled = false;
+    const seen = new Set();
+    for (const p of providers) {
+      if (!p.city || !p.state) continue;
+      if (p.state.toLowerCase() !== selectedState.toLowerCase()) continue;
+      const key = p.city.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const opt = document.createElement("option");
+      opt.value = p.city;
+      opt.textContent = p.city;
+      citySelect.appendChild(opt);
+    }
+  }
+
   fetchProviders()
     .then((providers) => {
+      allProviders = providers;
+
       // Unique categories, in first-seen order.
       const seen = new Set();
       knownCategories = [];
@@ -107,28 +156,49 @@ if (tagRow) {
         }
       }
       renderTags(knownCategories);
+      populateStates(providers);
     })
     .catch((err) => {
       console.error(err);
       tagRow.innerHTML = "";
     });
 
+  stateSelect.addEventListener("change", () => {
+    populateCities(allProviders, stateSelect.value);
+  });
+
   function goToCategory(category) {
-    window.location.href = `category.html?type=${encodeURIComponent(category)}`;
+    const params = new URLSearchParams();
+    params.set("type", category);
+    if (stateSelect.value) params.set("state", stateSelect.value);
+    if (citySelect.value) params.set("city", citySelect.value);
+    window.location.href = `category.html?${params.toString()}`;
   }
 
   function handleSearch() {
     const query = searchInput.value.trim();
-    if (!query) return;
 
-    const lowerQuery = query.toLowerCase();
-    const matched = knownCategories.find((c) => c.toLowerCase() === lowerQuery);
+    // A search with no typed text but a location picked should
+    // still work - browse everyone in that state/city regardless
+    // of category.
+    if (!query && !stateSelect.value && !citySelect.value) return;
 
-    if (matched) {
-      goToCategory(matched);
-    } else {
-      window.location.href = `category.html?q=${encodeURIComponent(query)}`;
+    const params = new URLSearchParams();
+
+    if (query) {
+      const lowerQuery = query.toLowerCase();
+      const matched = knownCategories.find((c) => c.toLowerCase() === lowerQuery);
+      if (matched) {
+        params.set("type", matched);
+      } else {
+        params.set("q", query);
+      }
     }
+
+    if (stateSelect.value) params.set("state", stateSelect.value);
+    if (citySelect.value) params.set("city", citySelect.value);
+
+    window.location.href = `category.html?${params.toString()}`;
   }
 
   searchGo.addEventListener("click", handleSearch);
