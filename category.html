@@ -74,7 +74,8 @@
     let html = "";
 
     if (entry.photo) {
-      html += `<img class="provider-photo" src="${entry.photo}" alt="${entry.name}" loading="lazy" onerror="this.style.display='none'">`;
+      const photoUrl = toRawGithubUrl(entry.photo);
+      html += `<img class="provider-photo" src="${photoUrl}" alt="${entry.name}" loading="lazy" onerror="this.style.display='none'">`;
     }
 
     html += `<div class="provider-body">`;

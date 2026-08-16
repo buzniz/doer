@@ -45,6 +45,26 @@ function titleCase(str) {
   return str.replace(/\w\S*/g, (w) => w[0].toUpperCase() + w.slice(1).toLowerCase());
 }
 
+// A GitHub "blob" page URL (what you get from copying a link on
+// github.com) shows the image inside GitHub's own page, not the
+// raw image bytes - so it won't load in an <img> tag. This turns
+// a pasted blob URL into the matching raw.githubusercontent.com
+// URL automatically, so you can just paste whatever link GitHub
+// gives you in providers.txt.
+//
+// Handles both:
+//   .../blob/main/photos/x.jpg
+//   .../blob/refs/heads/main/photos/x.jpg
+// Leaves already-raw URLs (or any non-GitHub URL) untouched.
+function toRawGithubUrl(url) {
+  const match = url.match(
+    /^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/(?:refs\/heads\/)?([^/]+)\/(.+)$/
+  );
+  if (!match) return url;
+  const [, owner, repo, branch, path] = match;
+  return `https://raw.githubusercontent.com/${owner}/${repo}/refs/heads/${branch}/${path}`;
+}
+
 async function fetchProviders() {
   const res = await fetch("providers.txt");
   if (!res.ok) throw new Error("Could not load providers.txt");
