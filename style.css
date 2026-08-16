@@ -1,13 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  --bg: #3B4A63;
-  --bg-card: #465577;
-  --text: #F3F5F8;
-  --text-dim: #B0BACB;
-  --accent: #FFC94A;
+  --bg: #FEF8E9;
+  --bg-card: #FFFFFF;
+  --text: #3D342A;
+  --text-dim: #6B7280;
+  --accent: #D9A62E;
   --accent-soft: #E6C173;
-  --border: #5A6A87;
+  --border: #E5E7EB;
+  --headline: #3D342A;
 }
 
 * {
@@ -82,19 +83,11 @@ body {
   line-height: 1.05;
   letter-spacing: -0.01em;
   margin-bottom: 2.5rem;
-  -webkit-text-stroke: 3px #000000;
-  paint-order: stroke fill;
-  text-shadow:
-    -2px -2px 0 #000, 2px -2px 0 #000,
-    -2px 2px 0 #000, 2px 2px 0 #000,
-    -2px 0 0 #000, 2px 0 0 #000,
-    0 -2px 0 #000, 0 2px 0 #000;
+  color: var(--headline);
 }
 
 .accent {
   color: var(--accent);
-  -webkit-text-stroke: 3px #000000;
-  paint-order: stroke fill;
 }
 
 /* ---------- prompt / search ---------- */
@@ -103,7 +96,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: #333F56;
+  background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 1rem 1.25rem;
@@ -196,8 +189,8 @@ body {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.85rem;
   color: var(--text);
-  background: #2A3548;
-  border: 1px solid #24304A;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
   border-radius: 999px;
   padding: 0.5rem 1rem;
   cursor: pointer;
@@ -206,8 +199,7 @@ body {
 
 .tag:hover,
 .tag:focus-visible {
-  background: #34405A;
-  border-color: var(--accent-soft);
+  border-color: var(--accent);
   color: var(--accent-soft);
 }
 
