@@ -74,12 +74,13 @@ body {
   font-family: 'JetBrains Mono', monospace;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--text);
+  color: var(--accent);
   letter-spacing: 0.04em;
   margin-bottom: 1.25rem;
-  background: #EAEAEA;
+  background: #C9C9C9;
   border-radius: 6px;
-  padding: 0.3rem 0.75rem;
+  padding: 0.25rem 0.5rem;
+  white-space: nowrap;
 }
 
 .headline {
