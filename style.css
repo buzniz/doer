@@ -366,6 +366,18 @@ body {
   gap: 0.25rem;
 }
 
+.switch-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-width: 500px;
+  margin-bottom: 2rem;
+}
+
+.switch-row .location-select {
+  width: 100%;
+}
+
 .request-form {
   display: flex;
   flex-direction: column;

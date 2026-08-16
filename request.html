@@ -22,6 +22,11 @@
 
     <div id="providerSummary" class="provider-summary" style="display:none;"></div>
 
+    <div id="switchRow" class="switch-row" style="display:none;">
+      <label class="form-label" for="providerSwitch">Choose a different provider</label>
+      <select id="providerSwitch" class="location-select"></select>
+    </div>
+
     <form
       id="requestForm"
       class="request-form"
@@ -57,54 +62,110 @@
 <script defer>
   window.addEventListener("DOMContentLoaded", async () => {
     const params = new URLSearchParams(window.location.search);
-    const name = params.get("name") || "";
+    let name = params.get("name") || "";
     const category = params.get("category") || "";
 
     const titleEl = document.getElementById("requestTitle");
     const subtitleEl = document.getElementById("requestSubtitle");
     const summaryEl = document.getElementById("providerSummary");
+    const switchRow = document.getElementById("switchRow");
+    const providerSwitch = document.getElementById("providerSwitch");
+    const hiddenProvider = document.getElementById("hiddenProvider");
+    const hiddenCategory = document.getElementById("hiddenCategory");
 
-    if (name) {
+    hiddenCategory.value = category;
+
+    // Renders the provider summary card (photo/stars/price/other)
+    // for whichever provider is currently selected. Called on
+    // initial load and again whenever someone picks a different
+    // provider from the switch dropdown - never touches the form
+    // fields below it, so typed-in info is never lost.
+    function renderSummary(match) {
+      if (!match) {
+        summaryEl.style.display = "none";
+        return;
+      }
+      let html = "";
+      if (match.photo) {
+        const photoUrl = toRawGithubUrl(match.photo);
+        html += `<img class="provider-photo" src="${photoUrl}" alt="${match.name}" onerror="this.style.display='none'">`;
+      }
+      html += `<div class="provider-body">`;
+      if (match.city || match.state) {
+        const location = [match.city, match.state].filter(Boolean).join(", ");
+        html += `<p class="provider-location">${location}</p>`;
+      }
+      if (match.stars) html += `<p class="provider-stars">${starsDisplay(match.stars)}</p>`;
+      if (match.price) html += `<p class="provider-price">${match.price}</p>`;
+      if (match.other) html += `<p class="provider-other">${match.other}</p>`;
+      html += `</div>`;
+      summaryEl.innerHTML = html;
+      summaryEl.style.display = "flex";
+    }
+
+    function selectProvider(providerName, sameCategoryProviders) {
+      name = providerName;
+      const match = sameCategoryProviders.find((p) => p.name === providerName);
+
       titleEl.innerHTML = `Request<br><span class="accent">${name}</span>`;
       subtitleEl.textContent = category
         ? `${titleCase(category)} - tell us what you need and DOER will reach out to connect you.`
         : `Tell us what you need and DOER will reach out to connect you.`;
-    } else {
+
+      hiddenProvider.value = name;
+      renderSummary(match);
+
+      // Update the URL quietly so refreshing/sharing the link
+      // keeps whichever provider is currently selected - without
+      // reloading the page or touching anything the person typed.
+      const newParams = new URLSearchParams(window.location.search);
+      newParams.set("name", providerName);
+      history.replaceState(null, "", `${window.location.pathname}?${newParams.toString()}`);
+    }
+
+    if (!name) {
       subtitleEl.textContent = "Tell us what you need and DOER will find the right person.";
     }
 
-    document.getElementById("hiddenProvider").value = name;
-    document.getElementById("hiddenCategory").value = category;
-
-    // Re-fetch providers.txt and find this exact provider so we can
-    // show their full details (stars/price/other/photo) again here,
-    // not just their name.
-    if (name && category) {
+    if (category) {
       try {
         const res = await fetch("providers.txt");
         const text = await res.text();
         const all = parseProviders(text);
-        const match = all.find(
-          (p) => p.name === name && p.category.toLowerCase() === category.toLowerCase()
+        const sameCategory = all.filter(
+          (p) => p.category.toLowerCase() === category.toLowerCase()
         );
 
-        if (match) {
-          let html = "";
-          if (match.photo) {
-            const photoUrl = toRawGithubUrl(match.photo);
-            html += `<img class="provider-photo" src="${photoUrl}" alt="${match.name}" onerror="this.style.display='none'">`;
+        // Only show the switcher if there's actually more than one
+        // provider to switch to - no point showing a dropdown with
+        // a single option.
+        if (sameCategory.length > 1) {
+          providerSwitch.innerHTML = "";
+          for (const p of sameCategory) {
+            const opt = document.createElement("option");
+            opt.value = p.name;
+            opt.textContent = p.name;
+            if (p.name === name) opt.selected = true;
+            providerSwitch.appendChild(opt);
           }
-          html += `<div class="provider-body">`;
-          if (match.stars) html += `<p class="provider-stars">${starsDisplay(match.stars)}</p>`;
-          if (match.price) html += `<p class="provider-price">${match.price}</p>`;
-          if (match.other) html += `<p class="provider-other">${match.other}</p>`;
-          html += `</div>`;
-          summaryEl.innerHTML = html;
-          summaryEl.style.display = "flex";
+          switchRow.style.display = "flex";
+
+          providerSwitch.addEventListener("change", () => {
+            selectProvider(providerSwitch.value, sameCategory);
+          });
+        }
+
+        if (name) {
+          const initialMatch = sameCategory.find((p) => p.name === name);
+          selectProvider(name, sameCategory);
+          if (!initialMatch) renderSummary(null);
         }
       } catch (err) {
         console.error("Could not load provider details:", err);
       }
+    } else if (name) {
+      titleEl.innerHTML = `Request<br><span class="accent">${name}</span>`;
+      hiddenProvider.value = name;
     }
 
     const form = document.getElementById("requestForm");
