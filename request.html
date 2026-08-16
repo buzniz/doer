@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOER - Request</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <a href="index.html" class="wordmark" style="text-decoration:none;color:inherit;">DOER</a>
+    <nav class="topnav">
+      <a href="index.html" class="nav-link">Back to search</a>
+    </nav>
+  </header>
+
+  <main class="hero">
+    <p class="eyebrow">// request</p>
+    <h1 class="headline" id="requestTitle">Get in touch<span class="accent">.</span></h1>
+    <p id="requestSubtitle" class="request-subtitle"></p>
+
+    <div id="providerSummary" class="provider-summary" style="display:none;"></div>
+
+    <form
+      id="requestForm"
+      class="request-form"
+      action="https://formspree.io/f/xaewdbar"
+      method="POST"
+    >
+      <input type="hidden" name="requested_provider" id="hiddenProvider">
+      <input type="hidden" name="requested_category" id="hiddenCategory">
+
+      <label class="form-label" for="fromName">Your name</label>
+      <input class="form-input" type="text" id="fromName" name="Your name" required>
+
+      <label class="form-label" for="fromContact">Your email or phone</label>
+      <input class="form-input" type="text" id="fromContact" name="Your contact info" required>
+
+      <label class="form-label" for="message">What do you need?</label>
+      <textarea class="form-input" id="message" name="Message" rows="5" required></textarea>
+
+      <button class="prompt-go" type="submit" style="margin-top: 1rem;">Send request</button>
+    </form>
+
+    <div id="successMsg" class="request-success" style="display:none;">
+      <p>Request sent. DOER will reach out to connect you.</p>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <p>DOER - get things done.</p>
+  </footer>
+
+<script src="script.js" defer></script>
+<script defer>
+  window.addEventListener("DOMContentLoaded", async () => {
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get("name") || "";
+    const category = params.get("category") || "";
+
+    const titleEl = document.getElementById("requestTitle");
+    const subtitleEl = document.getElementById("requestSubtitle");
+    const summaryEl = document.getElementById("providerSummary");
+
+    if (name) {
+      titleEl.innerHTML = `Request<br><span class="accent">${name}</span>`;
+      subtitleEl.textContent = category
+        ? `${titleCase(category)} - tell us what you need and DOER will reach out to connect you.`
+        : `Tell us what you need and DOER will reach out to connect you.`;
+    } else {
+      subtitleEl.textContent = "Tell us what you need and DOER will find the right person.";
+    }
+
+    document.getElementById("hiddenProvider").value = name;
+    document.getElementById("hiddenCategory").value = category;
+
+    // Re-fetch providers.txt and find this exact provider so we can
+    // show their full details (stars/price/other/photo) again here,
+    // not just their name.
+    if (name && category) {
+      try {
+        const res = await fetch("providers.txt");
+        const text = await res.text();
+        const all = parseProviders(text);
+        const match = all.find(
+          (p) => p.name === name && p.category.toLowerCase() === category.toLowerCase()
+        );
+
+        if (match) {
+          let html = "";
+          if (match.photo) {
+            const photoUrl = toRawGithubUrl(match.photo);
+            html += `<img class="provider-photo" src="${photoUrl}" alt="${match.name}" onerror="this.style.display='none'">`;
+          }
+          html += `<div class="provider-body">`;
+          if (match.stars) html += `<p class="provider-stars">${starsDisplay(match.stars)}</p>`;
+          if (match.price) html += `<p class="provider-price">${match.price}</p>`;
+          if (match.other) html += `<p class="provider-other">${match.other}</p>`;
+          html += `</div>`;
+          summaryEl.innerHTML = html;
+          summaryEl.style.display = "flex";
+        }
+      } catch (err) {
+        console.error("Could not load provider details:", err);
+      }
+    }
+
+    const form = document.getElementById("requestForm");
+    const successMsg = document.getElementById("successMsg");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const submitBtn = form.querySelector("button[type=submit]");
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending...";
+
+      try {
+        const res = await fetch(form.action, {
+          method: "POST",
+          body: new FormData(form),
+          headers: { Accept: "application/json" }
+        });
+
+        if (res.ok) {
+          form.style.display = "none";
+          successMsg.style.display = "block";
+        } else {
+          throw new Error("Form submission failed");
+        }
+      } catch (err) {
+        console.error(err);
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Send request";
+        alert("Something went wrong sending your request. Please try again.");
+      }
+    });
+  });
+</script>
+</body>
+</html>

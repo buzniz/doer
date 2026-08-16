@@ -257,6 +257,16 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.provider-card:hover,
+.provider-card:focus-visible {
+  border-color: var(--accent-soft);
+  transform: translateY(-2px);
 }
 
 .provider-photo {
@@ -295,4 +305,79 @@ body {
   font-size: 0.8rem;
   color: var(--text-dim);
   font-style: italic;
+}
+
+/* ---------- request form ---------- */
+
+.request-subtitle {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  margin: 1rem 0 1.5rem;
+  max-width: 500px;
+}
+
+.provider-summary {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  max-width: 500px;
+  margin-bottom: 2rem;
+}
+
+.provider-summary .provider-photo {
+  width: 72px;
+  height: 72px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.provider-summary .provider-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.request-form {
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  gap: 0.4rem;
+}
+
+.form-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-top: 1rem;
+}
+
+.form-input {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.15s ease;
+  resize: vertical;
+}
+
+.form-input:focus {
+  border-color: var(--accent);
+}
+
+.request-success {
+  max-width: 500px;
+  background: var(--bg-card);
+  border: 1px solid var(--accent-soft);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  color: var(--text);
 }

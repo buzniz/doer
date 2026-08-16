@@ -68,8 +68,9 @@
   }
 
   function renderCard(entry) {
-    const card = document.createElement("div");
+    const card = document.createElement("a");
     card.className = "provider-card";
+    card.href = `request.html?name=${encodeURIComponent(entry.name)}&category=${encodeURIComponent(entry.category)}`;
 
     let html = "";
 
