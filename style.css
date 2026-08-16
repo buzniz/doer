@@ -72,14 +72,14 @@ body {
 .eyebrow {
   display: inline-block;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 1.4rem;
-  color: var(--accent);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
   letter-spacing: 0.04em;
   margin-bottom: 1.25rem;
-  background: var(--bg-card);
-  border: 2px solid var(--border);
-  border-radius: 999px;
-  padding: 0.35rem 1rem;
+  background: #EAEAEA;
+  border-radius: 6px;
+  padding: 0.3rem 0.75rem;
 }
 
 .headline {
