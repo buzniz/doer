@@ -1,0 +1,30 @@
+CATEGORIES (reference only, not read by the code):
+moving
+tech-repair
+cleaning
+plumbing
+gutters
+pressure-washing
+
+---
+category:
+name:
+stars:
+price:
+other:
+photo:
+---
+category: moving
+name: Jacob Wick
+stars:
+price: $15/h
+other:
+photo:
+---
+category: tech-repair
+name: Greg
+stars: 5
+price: $50/completion
+other: allergic to cats
+photo: https://github.com/buzniz/doer/blob/main/photos/low%20quality%20emoji.jfif
+---
