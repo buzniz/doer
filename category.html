@@ -128,7 +128,7 @@
     const grid = document.getElementById("cardGrid");
 
     try {
-      const res = await fetch("data/providers.txt");
+      const res = await fetch("providers.txt");
       if (!res.ok) throw new Error("Could not load providers.txt");
       const text = await res.text();
       const allProviders = parseProviders(text);
