@@ -7,8 +7,8 @@
   --text-dim: #6B7280;
   --accent: #D9A62E;
   --accent-soft: #E6C173;
-  --border: #E5E7EB;
-  --headline: #3D342A;
+  --border: #1A1A1A;
+  --headline: #8B4C2E;
 }
 
 * {
@@ -97,7 +97,7 @@ body {
   align-items: center;
   gap: 0.75rem;
   background: var(--bg-card);
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: 10px;
   padding: 1rem 1.25rem;
   max-width: 640px;
@@ -190,7 +190,7 @@ body {
   font-size: 0.85rem;
   color: var(--text);
   background: var(--bg-card);
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: 999px;
   padding: 0.5rem 1rem;
   cursor: pointer;
@@ -244,7 +244,7 @@ body {
 
 .provider-card {
   background: var(--bg-card);
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: 10px;
   overflow: hidden;
   display: flex;
@@ -313,7 +313,7 @@ body {
   gap: 1rem;
   align-items: center;
   background: var(--bg-card);
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: 10px;
   padding: 1rem;
   max-width: 500px;
@@ -350,7 +350,7 @@ body {
 
 .form-input {
   background: var(--bg-card);
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: 8px;
   padding: 0.7rem 0.9rem;
   color: var(--text);
