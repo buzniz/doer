@@ -41,7 +41,7 @@ body {
 
 .wordmark {
   font-family: 'Archivo Black', sans-serif;
-  font-size: 1.5rem;
+  font-size: 2rem;
   letter-spacing: 0.02em;
 }
 
@@ -100,6 +100,10 @@ body {
   flex-wrap: wrap;
 }
 
+.location-field {
+  position: relative;
+}
+
 .location-select {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.85rem;
@@ -108,7 +112,18 @@ body {
   border: 2px solid var(--border);
   border-radius: 8px;
   padding: 0.5rem 0.8rem;
-  cursor: pointer;
+  cursor: text;
+  outline: none;
+  width: 140px;
+  transition: border-color 0.15s ease;
+}
+
+.location-select:focus {
+  border-color: var(--accent);
+}
+
+.location-select::placeholder {
+  color: var(--text-dim);
 }
 
 .location-select:disabled {

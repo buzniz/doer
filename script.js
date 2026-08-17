@@ -81,10 +81,14 @@ const searchGo = document.getElementById("searchGo");
 const tagRow = document.getElementById("tagRow");
 const stateSelect = document.getElementById("stateSelect");
 const citySelect = document.getElementById("citySelect");
+const stateOptions = document.getElementById("stateOptions");
+const cityOptions = document.getElementById("cityOptions");
 
 if (tagRow) {
   let knownCategories = [];
   let allProviders = [];
+  let knownStates = [];
+  let knownCities = [];
 
   function renderTags(categories) {
     tagRow.innerHTML = "";
@@ -97,33 +101,36 @@ if (tagRow) {
     }
   }
 
-  // Fill the state dropdown with every unique state that appears
+  // Fill the state datalist with every unique state that appears
   // in providers.txt, in first-seen order. Entries with no state
   // set are simply not counted - they just won't be filterable
   // by location, same as any other optional field.
   function populateStates(providers) {
     const seen = new Set();
-    stateSelect.innerHTML = '<option value="">All states</option>';
+    knownStates = [];
+    stateOptions.innerHTML = "";
     for (const p of providers) {
       if (!p.state) continue;
       const key = p.state.toLowerCase();
       if (seen.has(key)) continue;
       seen.add(key);
+      knownStates.push(p.state);
       const opt = document.createElement("option");
       opt.value = p.state;
-      opt.textContent = p.state;
-      stateSelect.appendChild(opt);
+      stateOptions.appendChild(opt);
     }
   }
 
-  // Fill the city dropdown based on whichever state is currently
-  // selected. If no state is selected, city stays disabled -
+  // Fill the city datalist based on whichever state is currently
+  // typed in. If no valid state is entered, city stays disabled -
   // picking a city without a state doesn't make sense once there
   // are same-named cities in different states.
   function populateCities(providers, selectedState) {
-    citySelect.innerHTML = '<option value="">All cities</option>';
+    cityOptions.innerHTML = "";
+    knownCities = [];
     if (!selectedState) {
       citySelect.disabled = true;
+      citySelect.value = "";
       return;
     }
     citySelect.disabled = false;
@@ -134,11 +141,23 @@ if (tagRow) {
       const key = p.city.toLowerCase();
       if (seen.has(key)) continue;
       seen.add(key);
+      knownCities.push(p.city);
       const opt = document.createElement("option");
       opt.value = p.city;
-      opt.textContent = p.city;
-      citySelect.appendChild(opt);
+      cityOptions.appendChild(opt);
     }
+  }
+
+  // Text inputs let someone type anything, including things that
+  // don't match a real state/city. This finds the actual matching
+  // value from the known list (case-insensitive) so partial or
+  // mis-cased typing still works, and returns "" if nothing real
+  // matches - so a stray typo can't silently filter results down
+  // to nothing without the person realizing why.
+  function resolveTyped(typedValue, knownList) {
+    if (!typedValue) return "";
+    const match = knownList.find((v) => v.toLowerCase() === typedValue.toLowerCase());
+    return match || "";
   }
 
   fetchProviders()
@@ -163,25 +182,30 @@ if (tagRow) {
       tagRow.innerHTML = "";
     });
 
-  stateSelect.addEventListener("change", () => {
-    populateCities(allProviders, stateSelect.value);
+  stateSelect.addEventListener("input", () => {
+    const resolved = resolveTyped(stateSelect.value, knownStates);
+    populateCities(allProviders, resolved);
   });
 
   function goToCategory(category) {
     const params = new URLSearchParams();
     params.set("type", category);
-    if (stateSelect.value) params.set("state", stateSelect.value);
-    if (citySelect.value) params.set("city", citySelect.value);
+    const state = resolveTyped(stateSelect.value, knownStates);
+    const city = resolveTyped(citySelect.value, knownCities);
+    if (state) params.set("state", state);
+    if (city) params.set("city", city);
     window.location.href = `category.html?${params.toString()}`;
   }
 
   function handleSearch() {
     const query = searchInput.value.trim();
+    const state = resolveTyped(stateSelect.value, knownStates);
+    const city = resolveTyped(citySelect.value, knownCities);
 
     // A search with no typed text but a location picked should
     // still work - browse everyone in that state/city regardless
     // of category.
-    if (!query && !stateSelect.value && !citySelect.value) return;
+    if (!query && !state && !city) return;
 
     const params = new URLSearchParams();
 
@@ -195,8 +219,8 @@ if (tagRow) {
       }
     }
 
-    if (stateSelect.value) params.set("state", stateSelect.value);
-    if (citySelect.value) params.set("city", citySelect.value);
+    if (state) params.set("state", state);
+    if (city) params.set("city", city);
 
     window.location.href = `category.html?${params.toString()}`;
   }
