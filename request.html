@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DOER - Request</title>
+<title>MyLocalTrades - Request</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <header class="topbar">
-    <a href="index.html" class="wordmark" style="text-decoration:none;color:inherit;">DOER</a>
+    <a href="index.html" class="wordmark" style="text-decoration:none;color:inherit;">MLT</a>
     <nav class="topnav">
       <a href="index.html" class="nav-link">Back to search</a>
     </nav>
@@ -49,13 +49,13 @@
     </form>
 
     <div id="successMsg" class="request-success" style="display:none;">
-      <p>Request sent. DOER will reach out to connect you.</p>
+      <p>Request sent. MyLocalTrades will reach out to connect you.</p>
     </div>
 
   </main>
 
   <footer class="footer">
-    <p>DOER - get things done.</p>
+    <p>MyLocalTrades - get things done.</p>
   </footer>
 
 <script src="script.js" defer></script>
@@ -109,8 +109,8 @@
 
       titleEl.innerHTML = `Request<br><span class="accent">${name}</span>`;
       subtitleEl.textContent = category
-        ? `${titleCase(category)} - tell us what you need and DOER will reach out to connect you.`
-        : `Tell us what you need and DOER will reach out to connect you.`;
+        ? `${titleCase(category)} - tell us what you need and MyLocalTrades will reach out to connect you.`
+        : `Tell us what you need and MyLocalTrades will reach out to connect you.`;
 
       hiddenProvider.value = name;
       renderSummary(match);
@@ -124,7 +124,7 @@
     }
 
     if (!name) {
-      subtitleEl.textContent = "Tell us what you need and DOER will find the right person.";
+      subtitleEl.textContent = "Tell us what you need and MyLocalTrades will find the right person.";
     }
 
     if (category) {

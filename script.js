@@ -1,4 +1,4 @@
-// DOER - homepage script
+// MyLocalTrades (MLT) - homepage script
 // v1: directory driven entirely by providers.txt. There is no
 // hardcoded category list anywhere in this file - homepage
 // buttons are built from whatever "category:" values actually
