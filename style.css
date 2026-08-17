@@ -70,27 +70,12 @@ body {
 }
 
 .eyebrow {
-  position: relative;
-  display: inline-block;
   font-family: 'JetBrains Mono', monospace;
   font-size: 1rem;
   font-weight: 600;
   color: var(--accent);
   letter-spacing: 0.04em;
   margin-bottom: 1.25rem;
-}
-
-.eyebrow::before {
-  content: "";
-  position: absolute;
-  top: -0.1rem;
-  left: -0.4rem;
-  width: 31%;
-  height: 120%;
-  padding: 0 0.4rem;
-  background: #C9C9C9;
-  border-radius: 6px;
-  z-index: -1;
 }
 
 .headline {
